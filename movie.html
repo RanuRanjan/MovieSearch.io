@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Search</title>
+    <style>
+     #info{
+         max-width:60%;
+         margin:50px auto;
+         display: flex;
+         flex-direction: row;
+         justify-content: center;
+
+     }
+
+    
+     body{
+         text-align: center;
+         margin-top:80px;
+         background-color: #03203C;
+         color: #fff;
+
+     }
+     #movie_img>img{
+         width:100%;
+         height: 100%;
+     }
+     #movie_img{
+           width:25%;
+     }
+     #movie_info{
+         width:76%;
+         font-size: 16;
+         font-weight: 700;
+         text-align: left;
+         color: #ffff;
+         padding: 10px;
+         
+     }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="search" placeholder="Enter a Movie Name" />
+    <button onclick="movieSearch()">Search</button>
+    <h1>Movies Info</h1>
+    <div id="info">
+        
+        <div id="movie_img"></div>
+        <div id="movie_info"> </div>
+    </div>
+  </body>
+  <script>
+    //  first i have fetch data through api
+
+    async function movieSearch() {
+      try {
+        let movie = document.getElementById("search").value;
+
+        let response = await fetch(
+          `http://www.omdbapi.com/?t=${movie}&apikey=34d5bae3`
+        );
+
+        let data = await response.json();
+        console.log(data);
+      
+
+      // creating html tag to append my data from object
+
+      let movies_info = document.getElementById("movie_info");
+      let movies_img=  document.getElementById("movie_img");
+
+      function movies(){
+        movies_img.innerHTML = "";
+        movies_info.innerHTML = "";
+
+// titile
+        let movie_name = document.createElement("p");
+        movie_name.innerHTML = `MovieName  : ${data.Title}`;
+// actors
+        let actors = document.createElement("p");
+        actors.innerHTML = `Actors : ${data.Actors}`;
+
+// rating
+        let rating = document.createElement("p");
+        rating.innerHTML = `Rating : ${data.imdbRating}`;
+
+// date of release
+
+        let date = document.createElement("p");
+        date.innerHTML = `ReleasedDate : ${data.Released}`;
+
+
+
+
+        let image=document.createElement("img");
+        image.src =`${data.Poster}`
+        console.log(image);
+
+
+        // let movie_name=document.createElement("p")
+        // movie_name.innerHTML= ` hi : ${data.Title}`
+        // console.log(movie_name);
+
+        movies_info.append(movie_name,actors,rating,date);
+        movies_img.append(image)
+        // console.log(movies_img);
+      }
+      movies();
+    } 
+    catch (err) {
+        console.log(err);
+      }
+    }
+  </script>
+</html>

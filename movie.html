@@ -7,6 +7,7 @@
     <title>Movie Search</title>
     <style>
      #info{
+       font-size: 20px;
          max-width:60%;
          margin:50px auto;
          display: flex;
@@ -19,7 +20,7 @@
      body{
          text-align: center;
          margin-top:80px;
-         background-color: #03203C;
+         background-image: url("https://www.zastavki.com/pictures/1920x1080/2017Creative_Wallpaper_Film_reel_on_a_gray_background_112835_23.jpg");
          color: #fff;
 
      }
@@ -39,19 +40,62 @@
          padding: 10px;
          
      }
+     #main{
+       width: 600px;
+       height: 50px;
+       margin: auto;
+       /* margin-bottom: 20px; */
+     }
+     #search{
+          width: 80%;
+          height: 80%;
+          border-radius: 20px;
+          border: none;
+          padding: 5px 10px;
+          outline: none;
+          font-size: 20px;
+     }
+     #btn{
+       width: 15%;
+       height: 100%;
+       border-radius: 20px;
+       border: none;
+     }
+     .h1{
+
+     }
+     h1{
+       width: 20%;
+       margin: auto;
+       font-size: 50px;
+       background-color: #E2B616;
+       color: black;
+       border-radius: 10px;
+       margin-bottom: 10px !important;
+      
+
+     }
+
     </style>
   </head>
   <body>
-    <input type="text" id="search" placeholder="Enter a Movie Name" />
-    <button onclick="movieSearch()">Search</button>
-    <h1>Movies Info</h1>
+    <div class="h1">
+      <h1>Movies Info</h1>
+    </div>
+    <div id="main">
+      
+      <input type="text" id="search" placeholder="Enter a Movie Name" />
+      <button id="btn"onclick="movieSearch()" onkeypress="movieSearch()">Search</button>
+    </div>
+    
     <div id="info">
         
         <div id="movie_img"></div>
         <div id="movie_info"> </div>
-        
+        <div id="must_watch"></div>
     </div>
-    <div id="notfound"></div>
+    <div id="not"></div>
+   
 
   </body>
   <script>
@@ -62,7 +106,7 @@
         let movie = document.getElementById("search").value;
 
         let response = await fetch(
-          `http://www.omdbapi.com/?t=${movie}&apikey=34d5bae3`
+          `http://www.omdbapi.com/?t=${movie}&apikey=34d5bae3`    // for all related search (s) ---(t)
         );
 
         let data = await response.json();
@@ -73,7 +117,9 @@
 
       let movies_info = document.getElementById("movie_info");
       let movies_img=  document.getElementById("movie_img");
-      let notfound=document.getElementById("notfound"); 
+      let must_watch=  document.getElementById("must_watch");
+      let notfound=document.getElementById("not"); 
+
 
 
 
@@ -117,27 +163,48 @@
 
     //   condition for movie search 
        if (data.Response!="False"){
+       notfound.innerHTML=""
 
-        
         movies();
-        notfound.innerHTML=" "
+        
        
 
        }
        else{
         //    console.log(data.response);
+          notfound.innerHTML=""
            movies_img.innerHTML =""
            movies_info.innerHTML =""
+           must_watch.innerHTML =""
            let error =document.createElement("img")
            error.src="https://abhizzzzz.github.io/Movie-Search/search-bar.gif"
         //    console.log(error);
            notfound.append(error)
-
+          
        }
+       
 
 
     //    rating
-
+    if(data.imdbRating>7.5){
+      must_watch.innerHTML =""
+           let must=document.createElement("img")
+           must.src ="https://media2.giphy.com/media/59AnDOcd1jjdKaHCrV/giphy-preview.webp?cid=95b27944kxc4cbadwwd2rxdx2eurmdmrxscdhae2ce2v3bex&rid=giphy-preview.webp&ct=s"
+           console.log(must);
+           must_watch.append(must)
+           
+          
+       }
+     else  if(data.imdbRating<4.0){
+      must_watch.innerHTML =""
+      let must=document.createElement("img")
+      must.src ="http://1.bp.blogspot.com/-IWlN8jiRUc4/U8UggZ7xUNI/AAAAAAAAFSY/KhfBLKtJItM/s1600/NotRecommended.gif"
+      // console.log(must);
+      must_watch.append(must)
+  }
+   else {
+     must_watch.innerHTML =""
+   }
     } 
 
 
